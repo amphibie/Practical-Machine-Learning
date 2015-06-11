@@ -1,7 +1,7 @@
 ---
-title: "Practical Machine Learning Prediction Assignment Writeup"
+title: "Practical Machine Learning: Prediction Assignment Writeup"
 author: "Paul Foellbach"
-date: "Tuesday, June 10, 2015"
+date: "Thursday, June 11, 2015"
 output: html_document
 ---
 ### Executive Summary
@@ -60,7 +60,7 @@ training <- model_data[idx,]
 testing <- model_data[-idx,]
 ```
       
-### Modeling
+### Modeling 5 random forests
 We now build 5 random forests with 150 trees each. We make use of parallel processing to build this
 model. I found different examples of how to do parallel processing with random forests in R, this
 provided a big increase.
@@ -89,11 +89,11 @@ confusionMatrix(predictions2,testing$classe)
 ### Conclusions and Test Data Submit
 
 As can be seen from the confusion matrix this model is very accurate. I did experiment with PCA 
-and other models, but did not get as good of accuracy. Because my test data was around 99% 
+and other models, but did not get a comparable accuracy. Because my test data was around 99% 
 accurate (out of sample) I expected nearly all of the submitted test cases to be correct.  It turned out they 
 were all correct.
 
-Prepare the submission. (using COURSERA provided code)
+Prepare the submission (using the provided code by Coursera).
 
 ```{r}
 pml_write_files = function(x){
