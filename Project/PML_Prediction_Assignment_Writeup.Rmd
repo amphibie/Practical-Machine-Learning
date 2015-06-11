@@ -4,6 +4,7 @@ author: "Paul Foellbach"
 date: "Tuesday, June 10, 2015"
 output: html_document
 ---
+### Executive Summary
 
 Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement - a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: http://groupware.les.inf.puc-rio.br/har. The goal of this project is to predict the manner in which they did the execise. The dataset used in this project can be found here, and the experiment details are described in the original paper.
 
@@ -12,7 +13,7 @@ To realize this I made use of the R package caret and randomForest, this allowed
 each of the 20 test data cases provided in this assignment.  I made use of a seed value for 
 consistent results.
 
-###Loading packages, processing and loading Data
+### Loading packages, loading and processing Data
 ```{r,message=FALSE, warning=FALSE}
 library(Hmisc)
 library(caret)
@@ -51,6 +52,7 @@ feature_set
 ```
 
 We now have the model data built from our feature set.
+The data set is partioned in two parts. With the first part only the model parameters are estimated and on the basis of the second part the model error is calculated (out-of-sample error). The generalization of this procedure are the cross validation methods.
 
 ```{r}
 idx <- createDataPartition(y=model_data$classe, p=0.75, list=FALSE )
@@ -61,7 +63,7 @@ testing <- model_data[-idx,]
 ### Modeling
 We now build 5 random forests with 150 trees each. We make use of parallel processing to build this
 model. I found different examples of how to do parallel processing with random forests in R, this
-provided a great speedup.
+provided a big increase.
 
 ```{r}
 registerDoParallel()
@@ -88,7 +90,7 @@ confusionMatrix(predictions2,testing$classe)
 
 As can be seen from the confusion matrix this model is very accurate. I did experiment with PCA 
 and other models, but did not get as good of accuracy. Because my test data was around 99% 
-accurate I expected nearly all of the submitted test cases to be correct.  It turned out they 
+accurate (out of sample) I expected nearly all of the submitted test cases to be correct.  It turned out they 
 were all correct.
 
 Prepare the submission. (using COURSERA provided code)

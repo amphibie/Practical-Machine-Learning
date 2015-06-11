@@ -67,10 +67,13 @@ img {
 </div>
 
 
+<div id="executive-summary" class="section level3">
+<h3>Executive Summary</h3>
 <p>Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement - a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: <a href="http://groupware.les.inf.puc-rio.br/har" class="uri">http://groupware.les.inf.puc-rio.br/har</a>. The goal of this project is to predict the manner in which they did the execise. The dataset used in this project can be found here, and the experiment details are described in the original paper.</p>
 <p>For the assignment I analyzed the provided data to determine what activity an individual perform. To realize this I made use of the R package caret and randomForest, this allowed me to build correct answers for each of the 20 test data cases provided in this assignment. I made use of a seed value for consistent results.</p>
-<div id="loading-packages-processing-and-loading-data" class="section level3">
-<h3>Loading packages, processing and loading Data</h3>
+</div>
+<div id="loading-packages-loading-and-processing-data" class="section level3">
+<h3>Loading packages, loading and processing Data</h3>
 <pre class="r"><code>library(Hmisc)
 library(caret)
 library(randomForest)
@@ -90,14 +93,14 @@ for(i in c(8:ncol(evaluation_data)-1)) {evaluation_data[,i] = as.numeric(as.char
 <pre class="r"><code>feature_set &lt;- colnames(training_data[colSums(is.na(training_data)) == 0])[-(1:7)]
 model_data &lt;- training_data[feature_set]
 feature_set</code></pre>
-<p>We now have the model data built from our feature set.</p>
+<p>We now have the model data built from our feature set. The data set is partioned in two parts. With the first part only the model parameters are estimated and on the basis of the second part the model error is calculated (out-of-sample error). The generalization of this procedure are the cross validation methods.</p>
 <pre class="r"><code>idx &lt;- createDataPartition(y=model_data$classe, p=0.75, list=FALSE )
 training &lt;- model_data[idx,]
 testing &lt;- model_data[-idx,]</code></pre>
 </div>
 <div id="modeling" class="section level3">
 <h3>Modeling</h3>
-<p>We now build 5 random forests with 150 trees each. We make use of parallel processing to build this model. I found different examples of how to do parallel processing with random forests in R, this provided a great speedup.</p>
+<p>We now build 5 random forests with 150 trees each. We make use of parallel processing to build this model. I found different examples of how to do parallel processing with random forests in R, this provided a big increase.</p>
 <pre class="r"><code>registerDoParallel()
 x &lt;- training[-ncol(training)]
 y &lt;- training$classe
@@ -114,37 +117,37 @@ confusionMatrix(predictions2,testing$classe)</code></pre>
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1395    5    0    0    0
-##          B    0  941    6    0    0
-##          C    0    3  848    8    2
-##          D    0    0    1  796    2
-##          E    0    0    0    0  897
+##          A 1395    4    0    0    0
+##          B    0  942    6    0    0
+##          C    0    3  848    9    2
+##          D    0    0    1  795    3
+##          E    0    0    0    0  896
 ## 
 ## Overall Statistics
-##                                          
-##                Accuracy : 0.9945         
-##                  95% CI : (0.992, 0.9964)
-##     No Information Rate : 0.2845         
-##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16      
-##                                          
-##                   Kappa : 0.993          
-##  Mcnemar's Test P-Value : NA             
+##                                           
+##                Accuracy : 0.9943          
+##                  95% CI : (0.9918, 0.9962)
+##     No Information Rate : 0.2845          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.9928          
+##  Mcnemar's Test P-Value : NA              
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            1.0000   0.9916   0.9918   0.9900   0.9956
-## Specificity            0.9986   0.9985   0.9968   0.9993   1.0000
-## Pos Pred Value         0.9964   0.9937   0.9849   0.9962   1.0000
-## Neg Pred Value         1.0000   0.9980   0.9983   0.9981   0.9990
+## Sensitivity            1.0000   0.9926   0.9918   0.9888   0.9945
+## Specificity            0.9989   0.9985   0.9965   0.9990   1.0000
+## Pos Pred Value         0.9971   0.9937   0.9838   0.9950   1.0000
+## Neg Pred Value         1.0000   0.9982   0.9983   0.9978   0.9988
 ## Prevalence             0.2845   0.1935   0.1743   0.1639   0.1837
-## Detection Rate         0.2845   0.1919   0.1729   0.1623   0.1829
-## Detection Prevalence   0.2855   0.1931   0.1756   0.1629   0.1829
-## Balanced Accuracy      0.9993   0.9950   0.9943   0.9947   0.9978</code></pre>
+## Detection Rate         0.2845   0.1921   0.1729   0.1621   0.1827
+## Detection Prevalence   0.2853   0.1933   0.1758   0.1629   0.1827
+## Balanced Accuracy      0.9994   0.9956   0.9942   0.9939   0.9972</code></pre>
 </div>
 <div id="conclusions-and-test-data-submit" class="section level3">
 <h3>Conclusions and Test Data Submit</h3>
-<p>As can be seen from the confusion matrix this model is very accurate. I did experiment with PCA and other models, but did not get as good of accuracy. Because my test data was around 99% accurate I expected nearly all of the submitted test cases to be correct. It turned out they were all correct.</p>
+<p>As can be seen from the confusion matrix this model is very accurate. I did experiment with PCA and other models, but did not get as good of accuracy. Because my test data was around 99% accurate (out of sample) I expected nearly all of the submitted test cases to be correct. It turned out they were all correct.</p>
 <p>Prepare the submission. (using COURSERA provided code)</p>
 <pre class="r"><code>pml_write_files = function(x){
   n = length(x)
