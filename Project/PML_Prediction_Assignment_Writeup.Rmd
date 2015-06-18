@@ -1,7 +1,7 @@
 ---
 title: "Practical Machine Learning: Prediction Assignment Writeup"
 author: "Paul Foellbach"
-date: "Wednesday, June 17, 2015"
+date: "Thursday, June 18, 2015"
 output: html_document
 ---
 ### Executive summary
@@ -108,8 +108,9 @@ pml_write_files = function(x){
 
 x <- evaluation_data
 x <- x[feature_set[feature_set!='classe']]
-answers <- predict(rf, newdata=x)
 
+#Generating predictions (answers) according to our model for the test data (evaluation_data, pml-testing.csv)
+answers <- predict(rf, newdata=x)
 answers
 
 pml_write_files(answers)
