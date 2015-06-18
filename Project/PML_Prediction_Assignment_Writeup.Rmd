@@ -24,7 +24,7 @@ set.seed(2048)
 options(warn=-1)
 ```
 
-First, I loaded the data both from the provided training and test data provided by COURSERA.
+First I loaded the data both from the training and test data provided by COURSERA.
 Some values contained a "#DIV/0!" that I replaced with an NA value.
 
 ```{r}
@@ -32,7 +32,7 @@ training_data <- read.csv("pml-training.csv", na.strings=c("#DIV/0!") )
 evaluation_data <- read.csv("pml-testing.csv", na.strings=c("#DIV/0!") )
 ```
 
-I also casted all columns from column 8 to the end to be numeric.
+I also changed the format of all columns from column 8 to the end to be numeric.
 
 ```{r}
 for(i in c(8:ncol(training_data)-1)) {training_data[,i] = as.numeric(as.character(training_data[,i]))}
@@ -40,8 +40,8 @@ for(i in c(8:ncol(training_data)-1)) {training_data[,i] = as.numeric(as.characte
 for(i in c(8:ncol(evaluation_data)-1)) {evaluation_data[,i] = as.numeric(as.character(evaluation_data[,i]))}
 ```
 
-Some columns were mostly blank. These did not contribute well to the prediction. I chose a feature
-set that only included complete columns. I also remove user name, timestamps and windows.  
+Some columns were mostly blank. These did not contribute well to the prediction. I choose a feature
+set that only includes complete columns. In addition I also remove user name, timestamps and windows.  
 
 Determine and display out feature set.
 
@@ -51,7 +51,7 @@ model_data <- training_data[feature_set]
 feature_set
 ```
 
-We now processed the model data built from our feature set and training_data. This data set is partioned in two parts. With the first part (training) only the model parameters are estimated and on the basis of the second part (testing) the model error is calculated (out-of-sample error). The generalization of this procedure are the cross validation methods.
+We make the model data built from our feature set and training_data. This data set is partioned in two parts. With the first part (training) only the model parameters are estimated and on the basis of the second part (testing) the model error is calculated (out-of-sample error). The generalization of this procedure are the cross validation methods.
 
 ```{r}
 idx <- createDataPartition(y=model_data$classe, p=0.75, list=FALSE )
@@ -60,7 +60,7 @@ testing <- model_data[-idx,]
 ```
       
 ### Modeling 5 random forests
-We now build 5 random forests with 150 trees each. We make use of parallel processing to build this
+We build 5 random forests with 150 trees each. We make use of parallel processing to build this
 model. I found different examples of how to do parallel processing with random forests in R, this
 provided a big increase.
 
