@@ -51,7 +51,7 @@ model_data <- training_data[feature_set]
 feature_set
 ```
 
-We now processed the model data built from our feature set. The data set is partioned in two parts. With the first part (training) only the model parameters are estimated and on the basis of the second part (testing) the model error is calculated (out-of-sample error). The generalization of this procedure are the cross validation methods.
+We now processed the model data built from our feature set and training_data. This data set is partioned in two parts. With the first part (training) only the model parameters are estimated and on the basis of the second part (testing) the model error is calculated (out-of-sample error). The generalization of this procedure are the cross validation methods.
 
 ```{r}
 idx <- createDataPartition(y=model_data$classe, p=0.75, list=FALSE )
@@ -89,10 +89,7 @@ confusionMatrix(predictions2,testing$classe)
 
 ### Conclusions and test data submit
 
-As can be seen from the confusion matrix of test data above and the error estimation with cross-validation this model is very accurate. I did experiment with PCA 
-and other models, but did not get a comparable accuracy. Because my test data (testing) was around 99% 
-accurate (out of sample error) I expected nearly all of the submitted test cases to be correct. It turned out they 
-were all correct.
+As can be seen from the confusion matrix of test data above and the error estimation with cross-validation this model is very accurate. I did experiment with PCA and other models, but did not get a comparable accuracy. Because my test data (testing) was around 99% accurate (out of sample error) I expected nearly all of the submitted test cases to be correct. It turned out they were all correct.
 
 Prepare the submission (using the provided code by Coursera).
 
